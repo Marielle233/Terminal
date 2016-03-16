@@ -23,8 +23,8 @@ pid_t exec_command(char * command)
     if (pID == 0)
     {
       printf("Child Process\n");
-      int res = system(command);
-      if (res != 0)
+      int res = execvp(command, (char *[]){ command, NULL });
+      if (res == -1)
       {
         printf("command not found\n");
         _exit(1);
