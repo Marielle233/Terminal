@@ -9,9 +9,11 @@
 
 pid_t pID;
 
+const int command_size = 256;
+
 int main(void)
 {
-	char command[256] = "\0";
+	char command[command_size];
 
 	while (1) {
 		strcpy(command, "\0");
@@ -35,9 +37,8 @@ void signal_handler(int sig)
 {
 
 	if (pID != 0)
-		printf("Parent\n");
-	else
-		printf("Child\n");
+		kill(pID, SIGKILL);
+
 }
 
 pid_t exec_command(char *command)
@@ -51,10 +52,7 @@ pid_t exec_command(char *command)
 	int status = 0;
 
 	if (pID == 0) {
-		if (waitforpid)
-			signal(SIGINT, signal_handler);
-		else
-			signal(SIGINT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 
 		int res = execvp(command, split_command(command));
 
@@ -65,7 +63,10 @@ pid_t exec_command(char *command)
 		printf("Failed to fork\n");
 		_exit(1);
 	} else {
-		signal(SIGINT, signal_handler);
+		if (waitforpid)
+			signal(SIGINT, signal_handler);
+		else
+			signal(SIGINT, SIG_IGN);
 		if (waitforpid)
 			waitpid(pID, &status, 0);
 	}

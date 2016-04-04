@@ -1,5 +1,7 @@
 cons: main.o
 	gcc -o cons main.o -fsanitize=address 
+hello: main1.o
+	gcc -o hello main1.c -fsanitize=address 
 cppcheck:
 	cppcheck -j2 main.c main.h
 checkpatch:
