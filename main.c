@@ -17,7 +17,7 @@ int main(void)
 
 	while (1) {
 		strcpy(command, "\0");
-		printf("maiterm > ");
+		printf("myterm:~$ ");
 		fgets(command, sizeof(command), stdin);
 		remove_substring(command, "\n");
 
